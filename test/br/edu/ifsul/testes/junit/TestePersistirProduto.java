@@ -6,30 +6,28 @@
 package br.edu.ifsul.testes.junit;
 
 import br.edu.ifsul.jpa.EntityManagerUtil;
-import br.edu.ifsul.modelo.Estado;
-import br.edu.ifsul.modelo.Pais;
+import br.edu.ifsul.modelo.Categoria;
+import br.edu.ifsul.modelo.Marca;
+import br.edu.ifsul.modelo.Produto;
 import javax.persistence.EntityManager;
-import junit.framework.Assert;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Haylton
+ * @author t1076986
  */
-public class TestePersistirEstado {
+public class TestePersistirProduto {
     EntityManager em;
-    
-    public TestePersistirEstado() {
+    public TestePersistirProduto() {
     }
     
     @Before
     public void setUp() {
-        
         em = EntityManagerUtil.getEntityManager();
-        
     }
     
     @After
@@ -37,23 +35,27 @@ public class TestePersistirEstado {
         em.close();
     }
     
-    @Test //seria equivalente ao PSVM
+    @Test
     public void teste(){
         boolean exception = false;
-        try{
-            Estado e = new Estado();
-            e.setNome("Brasília");
-            e.setUf("DF");
-            e.setPais(em.find(Pais.class, 2)); //em.find to trazendo do banco, fazendo um select
+        try {
+            Produto produto = new Produto();
+            produto.setNome("Galaxy S9");
+            produto.setDescricao("Smartphone de lançamento em 2018 com Infinity Screen");
+            produto.setPreco(Double.valueOf(4000));
+            produto.setQuantiadeEstoque(Double.valueOf(10));
+            produto.setMarca(em.find(Marca.class, 1));
+            produto.setCategoria(em.find(Categoria.class, 3));
             em.getTransaction().begin();
-            em.persist(e);
+            em.persist(produto);
             em.getTransaction().commit();
-        } catch(Exception e){
+        } catch (Exception e) {
             exception = true;
             e.printStackTrace();
+                        
         }
         
-        Assert.assertEquals(false,exception); //tô verificando com o boolean que eu criei para saber se a transação ocorreu ou não
+        Assert.assertEquals(false, exception);
     }
     
 }

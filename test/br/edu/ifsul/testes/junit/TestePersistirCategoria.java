@@ -6,30 +6,29 @@
 package br.edu.ifsul.testes.junit;
 
 import br.edu.ifsul.jpa.EntityManagerUtil;
-import br.edu.ifsul.modelo.Estado;
-import br.edu.ifsul.modelo.Pais;
+import br.edu.ifsul.modelo.Categoria;
 import javax.persistence.EntityManager;
-import junit.framework.Assert;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Haylton
+ * @author t1076986
  */
-public class TestePersistirEstado {
+public class TestePersistirCategoria {
+    boolean exception = false;
+    
     EntityManager em;
     
-    public TestePersistirEstado() {
+    public TestePersistirCategoria() {
     }
     
     @Before
     public void setUp() {
-        
         em = EntityManagerUtil.getEntityManager();
-        
     }
     
     @After
@@ -37,23 +36,19 @@ public class TestePersistirEstado {
         em.close();
     }
     
-    @Test //seria equivalente ao PSVM
+    @Test
     public void teste(){
-        boolean exception = false;
-        try{
-            Estado e = new Estado();
-            e.setNome("Brasília");
-            e.setUf("DF");
-            e.setPais(em.find(Pais.class, 2)); //em.find to trazendo do banco, fazendo um select
+        try {
+            Categoria categoria = new Categoria();
+            categoria.setNome("Hardware"); //depois persisto software, depois smartphone
             em.getTransaction().begin();
-            em.persist(e);
+            em.persist(categoria);
             em.getTransaction().commit();
-        } catch(Exception e){
+        } catch (Exception e) {
             exception = true;
             e.printStackTrace();
         }
         
-        Assert.assertEquals(false,exception); //tô verificando com o boolean que eu criei para saber se a transação ocorreu ou não
+        Assert.assertEquals(false, exception);
     }
-    
 }
