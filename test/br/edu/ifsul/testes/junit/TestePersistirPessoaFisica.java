@@ -44,14 +44,14 @@ public class TestePersistirPessoaFisica {
         boolean exception = false;
         try{
             PessoaFisica pf = new PessoaFisica();
-            pf.setCpf("633.248.281-80");
-            pf.setEmail("haylton2012@gmail.com");
+            pf.setCpf("878.693.850-93");
+            pf.setEmail("tes@gmail.com");
             pf.setNascimento(Calendar.getInstance());
-            pf.setNome("Haylton Rodrigues");
-            pf.setRg("33054864");
-            pf.setNomeUsuario("HayltonR");
+            pf.setNome("Tes Rodrigues");
+            pf.setRg("33225224");
+            pf.setNomeUsuario("TesT");
             pf.setSenha("usuario");
-            pf.setTelefone("999999956");
+            pf.setTelefone("999444456");
             em.getTransaction().begin();
             em.persist(pf);
             em.getTransaction().commit();
