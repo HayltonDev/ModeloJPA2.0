@@ -6,14 +6,19 @@
 package br.edu.ifsul.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -48,8 +53,22 @@ public class Pessoa implements Serializable{ //já strategy JOINED cria uma tabe
     @Length(max = 14, message = "O telefone não pode ter mais de {max} caracteres")
     @Column(name = "telefone", length = 14, nullable = false)
     private String telefone;
+    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY ) //o mappedBy eu tenho que informar qual o nome do atributo na classe endereco que estabele relação com a classe pessoa, no caso eu informo o nome do atributo na classe e não o nome que está no BD
+    List<Endereco> enderecos = new ArrayList<>(); //o cascade ali em cima são as operações de persisterncia que serão propagadas para os filhos
+                                                    //Fetchtype.EAGER serve para que quando eu carregar a pessoa, eu carrego todos os endereços da pessoa, já o lazy eu carrego tardiamente a lista somente quando eu
+                                                    //relmente acessar a classe de enderecos que vai ser carregada. Ou seja, no caso da EAGER, se eu tenho 100 pessoas e cada uma tem 10 endereços, no total são 1000, vai pesar, agora com lazy eu acesso pessoa, carrega uma e seus 10 endereços
+    
 
     public Pessoa() {
+    }
+    
+    public void adicionarEndereco(Endereco endereco){
+        endereco.setPessoa(this);
+        this.enderecos.add(endereco);
+    }
+    
+    public void removerEndereco(int index){
+        this.enderecos.remove(index);
     }
 
     public Integer getId() {
@@ -83,6 +102,16 @@ public class Pessoa implements Serializable{ //já strategy JOINED cria uma tabe
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
+
+    public List<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
+    }
+    
+    
 
     @Override
     public int hashCode() {

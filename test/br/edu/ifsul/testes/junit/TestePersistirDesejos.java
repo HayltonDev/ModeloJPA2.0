@@ -6,29 +6,33 @@
 package br.edu.ifsul.testes.junit;
 
 import br.edu.ifsul.jpa.EntityManagerUtil;
-import br.edu.ifsul.modelo.Categoria;
+import br.edu.ifsul.modelo.Estado;
+import br.edu.ifsul.modelo.Pais;
+import br.edu.ifsul.modelo.PessoaFisica;
+import br.edu.ifsul.modelo.Produto;
+import java.util.Calendar;
 import javax.persistence.EntityManager;
+import junit.framework.Assert;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author t1076986
+ * @author Haylton
  */
-public class TestePersistirCategoria {
-    boolean exception = false;
-    
+public class TestePersistirDesejos {
     EntityManager em;
     
-    public TestePersistirCategoria() {
+    public TestePersistirDesejos() {
     }
     
     @Before
     public void setUp() {
+        
         em = EntityManagerUtil.getEntityManager();
+        
     }
     
     @After
@@ -36,19 +40,22 @@ public class TestePersistirCategoria {
         em.close();
     }
     
-    @Test
+    @Test //seria equivalente ao PSVM
     public void teste(){
-        try {
-            Categoria categoria = new Categoria();
-            categoria.setNome("Smartphone"); //depois persisto software, depois smartphone
+        boolean exception = false;
+        try{
+            PessoaFisica pf = em.find(PessoaFisica.class, 2);
+            Produto produto = em.find(Produto.class, 1);
+            pf.getDesejos().add(produto);
             em.getTransaction().begin();
-            em.persist(categoria);
+            em.persist(pf);
             em.getTransaction().commit();
-        } catch (Exception e) {
+        } catch(Exception e){
             exception = true;
             e.printStackTrace();
         }
         
-        Assert.assertEquals(false, exception);
+        Assert.assertEquals(false,exception); //tô verificando com o boolean que eu criei para saber se a transação ocorreu ou não
     }
+    
 }

@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.edu.ifsul.testes.junit;
 
 import br.edu.ifsul.jpa.EntityManagerUtil;
-import br.edu.ifsul.modelo.Categoria;
+import br.edu.ifsul.modelo.TipoEndereco;
 import javax.persistence.EntityManager;
 import org.junit.After;
 import org.junit.Assert;
@@ -16,14 +11,12 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author t1076986
+ * @author Haylton
  */
-public class TestePersistirCategoria {
-    boolean exception = false;
-    
+public class TestePersistirTipoEndereco {
     EntityManager em;
     
-    public TestePersistirCategoria() {
+    public TestePersistirTipoEndereco() {
     }
     
     @Before
@@ -38,17 +31,21 @@ public class TestePersistirCategoria {
     
     @Test
     public void teste(){
+        
+        boolean exception = false;
         try {
-            Categoria categoria = new Categoria();
-            categoria.setNome("Smartphone"); //depois persisto software, depois smartphone
+            TipoEndereco tipoEndereco = new TipoEndereco();
+            tipoEndereco.setDescricao("Residencial");
             em.getTransaction().begin();
-            em.persist(categoria);
+            em.persist(tipoEndereco);
             em.getTransaction().commit();
         } catch (Exception e) {
             exception = true;
             e.printStackTrace();
+            
         }
         
         Assert.assertEquals(false, exception);
     }
+    
 }

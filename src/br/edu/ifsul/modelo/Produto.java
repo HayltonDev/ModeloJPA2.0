@@ -1,16 +1,23 @@
 package br.edu.ifsul.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.validator.constraints.Length;
@@ -39,7 +46,7 @@ public class Produto implements Serializable{
     @Column(name = "preco", nullable = false)
     private Double preco;
     
-    
+    @Min(message="O estoque não pode ser negativo", value = 0)
     @NotNull(message="A quantidade em estoque não pode ser nula")
     @Column(name = "quantiade_estoque", nullable = false)
     private Double quantiadeEstoque;
@@ -58,6 +65,14 @@ public class Produto implements Serializable{
     @JoinColumn(name="marca", referencedColumnName = "id", nullable = false)
     @ForeignKey(name="fk_marca")
     private Marca marca;
+     
+    @JoinTable(name="desejos", joinColumns = 
+            @JoinColumn(name="produto", referencedColumnName = "id", nullable = false), //primeiro eu faço o valo de cá de pois o inverseJoinColumns que seria o JoinColumn se fosse ManyToOne
+            inverseJoinColumns = 
+            @JoinColumn(name="pessoa_fisica", referencedColumnName = "id", nullable = false),//Se eu não colocar essa anotação, em vez de criar uma única tabela para a lista de produtos+pessoaFisica, irá ser criada duas tabelas e isso não é bom
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"pessoa_fisica", "produto"})})//com UniqueConstraint é a restrição eu não posso inserir duas vezes o mesmo produto para a mesma pessoa
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<PessoaFisica> desejam = new ArrayList<>();
 
     public Produto() {
     }
@@ -141,6 +156,20 @@ public class Produto implements Serializable{
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the desejam
+     */
+    public List<PessoaFisica> getDesejam() {
+        return desejam;
+    }
+
+    /**
+     * @param desejam the desejam to set
+     */
+    public void setDesejam(List<PessoaFisica> desejam) {
+        this.desejam = desejam;
     }
 
     
