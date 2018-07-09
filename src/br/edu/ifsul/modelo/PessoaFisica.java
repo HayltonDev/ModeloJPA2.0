@@ -65,6 +65,13 @@ public class PessoaFisica extends Pessoa implements Serializable{ //não é prec
             uniqueConstraints = {@UniqueConstraint(columnNames = {"pessoa_fisica", "produto"})})//Se eu não colocar essa anotação, em vez de criar uma única tabela para a lista de produtos+pessoaFisica, irá ser criada duas tabelas e isso não é bom
     private List<Produto> desejos = new ArrayList<>(); //com UniqueConstraint é a restrição eu não posso inserir duas vezes o mesmo produto para a mesma pessoa 
     
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="permissoes", joinColumns = 
+            @JoinColumn(name = "nome_usuario", referencedColumnName = "nome_usuario", nullable = false),
+            inverseJoinColumns = 
+            @JoinColumn(name = "permissao", referencedColumnName = "nome", nullable = false),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"nome_usuario", "permissao"})})
+    private List<Permissao> permissoes = new ArrayList<>();
 
     public PessoaFisica() {
     }
@@ -116,6 +123,15 @@ public class PessoaFisica extends Pessoa implements Serializable{ //não é prec
     public void setDesejos(List<Produto> desejos) {
         this.desejos = desejos;
     }
+
+    public List<Permissao> getPermissoes() {
+        return permissoes;
+    }
+
+    public void setPermissoes(List<Permissao> permissoes) {
+        this.permissoes = permissoes;
+    }
+    
     
     
     

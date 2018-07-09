@@ -6,32 +6,33 @@
 package br.edu.ifsul.testes.junit;
 
 import br.edu.ifsul.jpa.EntityManagerUtil;
-import br.edu.ifsul.modelo.Estado;
-import br.edu.ifsul.modelo.Pais;
+import br.edu.ifsul.modelo.Categoria;
+import br.edu.ifsul.modelo.Marca;
 import br.edu.ifsul.modelo.PessoaFisica;
+import br.edu.ifsul.modelo.Produto;
+import br.edu.ifsul.modelo.Venda;
+import br.edu.ifsul.modelo.VendaItens;
+import static java.time.temporal.TemporalQueries.zone;
 import java.util.Calendar;
 import javax.persistence.EntityManager;
-import junit.framework.Assert;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Haylton
+ * @author t1076986
  */
-public class TestePersistirPessoaFisica {
+public class TestePersistirParcela {
     EntityManager em;
-    
-    public TestePersistirPessoaFisica() {
+    public TestePersistirParcela() {
     }
     
     @Before
     public void setUp() {
-        
         em = EntityManagerUtil.getEntityManager();
-        
     }
     
     @After
@@ -39,28 +40,23 @@ public class TestePersistirPessoaFisica {
         em.close();
     }
     
-    @Test //seria equivalente ao PSVM
+    @Test
     public void teste(){
         boolean exception = false;
-        try{
-            PessoaFisica pf = new PessoaFisica();
-            pf.setCpf("878.693.850-93");
-            pf.setEmail("Jordania@gmail.com");
-            pf.setNascimento(Calendar.getInstance());
-            pf.setNome("Jordania");
-            pf.setRg("33225224");
-            pf.setNomeUsuario("jor_user");
-            pf.setSenha("usuario");
-            pf.setTelefone("919444456");
+        try {
+           
+            Venda venda = em.find(Venda.class, 1);
+            venda.gerarParcelas();
             em.getTransaction().begin();
-            em.persist(pf);
+            em.persist(venda);
             em.getTransaction().commit();
-        } catch(Exception e){
+        } catch (Exception e) {
             exception = true;
             e.printStackTrace();
+                        
         }
         
-        Assert.assertEquals(false,exception); //tô verificando com o boolean que eu criei para saber se a transação ocorreu ou não
+        Assert.assertEquals(false, exception);
     }
     
 }
