@@ -79,6 +79,13 @@ public class Endereco implements Serializable {
     @ForeignKey(name="fk_pessoa_id")
     private Pessoa pessoa;
     
+    @NotNull(message = "A cidade deve ser informada")
+    @ManyToOne
+    @JoinColumn(name = "cidade", referencedColumnName = "id", nullable = false)
+    @ForeignKey(name="fk_cidade_id")
+    private Cidade cidade;
+    
+    
     @NotNull(message = "O tipo de endereco  deve ser informado")
     @ManyToOne
     @JoinColumn(name = "tipo_endereco", referencedColumnName = "id", nullable = false)
@@ -167,6 +174,16 @@ public class Endereco implements Serializable {
     public void setTipoEndereco(TipoEndereco tipoEndereco) {
         this.tipoEndereco = tipoEndereco;
     }
+
+    public Cidade getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(Cidade cidade) {
+        this.cidade = cidade;
+    }
+    
+    
     
     
 

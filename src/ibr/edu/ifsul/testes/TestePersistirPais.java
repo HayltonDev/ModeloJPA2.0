@@ -15,8 +15,8 @@ public class TestePersistirPais {
     public static void main(String[] args) {
         EntityManager em = EntityManagerUtil.getEntityManager(); 
         Pais p = new Pais(); 
-        p.setNome("Brasil");
-        p.setIso("BRA");
+        p.setNome("Letônia");
+        p.setIso("Let");
         
         em.getTransaction().begin();
         em.persist(p);
