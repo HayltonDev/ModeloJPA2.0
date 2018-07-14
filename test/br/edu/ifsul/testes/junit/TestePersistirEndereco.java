@@ -6,6 +6,7 @@
 package br.edu.ifsul.testes.junit;
 
 import br.edu.ifsul.jpa.EntityManagerUtil;
+import br.edu.ifsul.modelo.Cidade;
 import br.edu.ifsul.modelo.Endereco;
 import br.edu.ifsul.modelo.PessoaFisica;
 import br.edu.ifsul.modelo.TipoEndereco;
@@ -40,8 +41,10 @@ public class TestePersistirEndereco {
         
         boolean exception = false;
         try {
-            PessoaFisica pf = em.find(PessoaFisica.class,2 );
+            PessoaFisica pf = em.find(PessoaFisica.class,7 );
             Endereco endereco = new Endereco();
+            Cidade cidade = em.getReference(Cidade.class,2);
+            
             endereco.setBairro("Centro");
             endereco.setCep("73752-065");
             endereco.setComplemento("AP 152");
@@ -49,6 +52,7 @@ public class TestePersistirEndereco {
             endereco.setNickname("Casa");
             endereco.setNumero("6");
             endereco.setReferencia("Perto do supermercado");
+            endereco.setCidade(cidade);
             endereco.setTipoEndereco(em.find(TipoEndereco.class, 1));
             pf.adicionarEndereco(endereco);
             em.getTransaction().begin();
